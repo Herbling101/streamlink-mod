@@ -29,7 +29,8 @@ example:
 
 this should start a new streamlink instance on the url and write to "output_1.mp4" in the shell's current working directory
 
-the streamlink operation is now wrapped as a subprocess within the streamlink-mod.py script, which will check if the operation is occurring once every second. If the stream is interrupted for any reason, the script should start a new stream with the same url and a new filename_x (output_2.mp4, output_3.mp4, ...)
+the streamlink operation is now wrapped as a subprocess within the streamlink_mod.py script, which will check if the operation is occurring once every second. 
+If the stream is interrupted for any reason, the script should start a new stream with the same url and a new filename_x (output_2.mp4, output_3.mp4, ...)
 
 #	Usage:
     
