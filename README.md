@@ -1,8 +1,8 @@
 # streamlink-mod
 auto-renew streamlink session after limit is met
 
-$ pip install psutil
-$ pip install streamlink
+    $ pip install psutil
+    $ pip install streamlink
 
 Manual steps:
 
