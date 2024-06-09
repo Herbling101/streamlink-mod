@@ -23,8 +23,8 @@ pip install psutil
 REM Create the scripts directory if it does not exist
 if not exist "%HOMEPATH%\scripts" mkdir "%HOMEPATH%\scripts"
 
-REM Create the streamlink-mod.py script
-echo Creating streamlink-mod.py...
+REM Create the monitor_streamlink.py script
+echo Creating monitor_streamlink.py...
 (
     echo import os
     echo import time
@@ -65,7 +65,7 @@ echo Creating streamlink-mod.py...
     echo.        terminate_process_and_children(process.pid)
     echo.    sys.exit(0)
     echo.
-    echo def streamlink-mod(url, filename):
+    echo def monitor_streamlink(url, filename):
     echo.    global process
     echo.    signal.signal(signal.SIGINT, signal_handler)
     echo.
@@ -76,25 +76,25 @@ echo Creating streamlink-mod.py...
     echo.
     echo if __name__ == "__main__":
     echo.    if len(sys.argv) != 3:
-    echo.        print("Usage: python streamlink-mod.py <URL> <FILENAME>")
+    echo.        print("Usage: python monitor_streamlink.py <URL> <FILENAME>")
     echo.        sys.exit(1)
     echo.
     echo.    url = sys.argv[1]
     echo.    filename = sys.argv[2]
     echo.
     echo.    print(f"Monitoring stream with URL: {url} and filename: {filename}")
-    echo.    streamlink-mod(url, filename)
-) > "%HOMEPATH%\scripts\streamlink-mod.py"
+    echo.    monitor_streamlink(url, filename)
+) > "%HOMEPATH%\scripts\monitor_streamlink.py"
 
-REM Append the streamlink-mod function to .bashrc
-echo Adding streamlink-mod function to .bashrc...
+REM Append the monitor_streamlink function to the bash.bashrc file
+echo Adding monitor_streamlink function to bash.bashrc...
 (
     echo.
-    echo function streamlink-mod() {
+    echo function monitor_streamlink() {
     echo.    action=$1
     echo.    url=$2
     echo.    filename=$3
-    echo.    pidfile="/tmp/streamlink-mod.pid"
+    echo.    pidfile="/tmp/monitor_streamlink.pid"
     echo.
     echo.    stop_monitor() {
     echo.        if [ -f $pidfile ]; then
@@ -111,35 +111,35 @@ echo Adding streamlink-mod function to .bashrc...
     echo.    case $action in
     echo.        start)
     echo.            if [ "$#" -ne 3 ]; then
-    echo.                echo "Usage: streamlink-mod start <URL> <FILENAME>"
+    echo.                echo "Usage: monitor_streamlink start <URL> <FILENAME>"
     echo.                return 1
     echo.            fi
     echo.
     echo.            stop_monitor
     echo.
-    echo.            python %HOMEPATH%/scripts/streamlink-mod.py "$url" "$filename" &
+    echo.            python %HOMEPATH%/scripts/monitor_streamlink.py "$url" "$filename" &
     echo.            echo $! > $pidfile
     echo.            echo "Monitor started"
     echo.            ;;
     echo.        stop)
     echo.            if [ "$#" -ne 1 ]; then
-    echo.                echo "Usage: streamlink-mod stop"
+    echo.                echo "Usage: monitor_streamlink stop"
     echo.                return 1
     echo.            fi
     echo.            stop_monitor
     echo.            echo "Monitor stopped"
     echo.            ;;
     echo.        *)
-    echo.            echo "Usage: streamlink-mod start <URL> <FILENAME> | streamlink-mod stop"
+    echo.            echo "Usage: monitor_streamlink start <URL> <FILENAME> | monitor_streamlink stop"
     echo.            return 1
     echo.            ;;
     echo.    esac
     echo }
-) >> %HOMEPATH%\.bashrc
+) >> "C:\Program Files\Git\etc\bash.bashrc"
 
-REM Reload .bashrc
-bash -c "source ~/.bashrc"
-
-echo Installation complete. You can now use the streamlink-mod function.
+REM Reload bash.bashrc (Git Bash must be restarted to apply changes)
+echo.
+echo Please restart Git Bash to apply the changes.
+echo Installation complete. You can now use the monitor_streamlink function.
 
 endlocal
