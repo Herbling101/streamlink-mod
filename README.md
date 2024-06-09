@@ -25,7 +25,7 @@ and hit enter for usage instructions.
 
 example:
 
-	$streamlink-mod https://www.youtube.com/watch?v=gCNeDWCI0vo output.mp4
+	$streamlink_mod https://www.youtube.com/watch?v=gCNeDWCI0vo output.mp4
 
 this should start a new streamlink instance on the url and write to "output_1.mp4" in the shell's current working directory
 
