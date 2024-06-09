@@ -1,4 +1,4 @@
-# streamlink-mod
+# streamlink_mod
 auto-renew streamlink session if there is any interruption
 
 ==============================
