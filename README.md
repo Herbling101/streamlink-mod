@@ -15,9 +15,11 @@ then enter:
 
 	$ pip install .
 
+Reload your bash terminal.
+
 then type:
 	
-	$streamlink-mod
+	$streamlink_mod
 
 and hit enter for usage instructions. 
 
@@ -29,9 +31,6 @@ this should start a new streamlink instance on the url and write to "output_1.mp
 
 the streamlink operation is now wrapped as a subprocess within the streamlink-mod.py script, which will check if the operation is occurring once every second. If the stream is interrupted for any reason, the script should start a new stream with the same url and a new filename_x (output_2.mp4, output_3.mp4, ...)
 
-
-    Reload your bash terminal.
-
-Usage:
+#	Usage:
     
-    $ streamlink-mod start "URL" "FILENAME.mp4" | streamlink-mod stop
+    $ streamlink_mod URL FILENAME.mp4
