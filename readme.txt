@@ -5,7 +5,8 @@
 
 clone this repo to your scripts directory
 
-    $ git clone 
+    $ git clone https://github.com/Herbling101/streamlink_mod.git
+
 open a shell in the directory which contains setup.py
 
 then enter:
