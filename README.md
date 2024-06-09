@@ -1,23 +1,23 @@
 # 	streamlink_mod
-auto-renew streamlink session if there is any interruption
 
+auto-renew streamlink session if there is any interruption
 
 #	Installation Instructions
 
 
 clone this repo to your scripts directory
 
-    $ git clone https://github.com/Herbling101/streamlink_mod.git
+	$ git clone https://github.com/Herbling101/streamlink_mod.git
     
 open a shell in the directory which contains setup.py
 
 then enter:
 
-    $ pip install .
+	$ pip install .
 
 then type:
 	
-     $streamlink-mod
+	$streamlink-mod
 
 and hit enter for usage instructions. 
 
