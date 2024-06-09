@@ -29,6 +29,7 @@ if not exist "%HOMEPATH%\scripts" (
 
 REM Create the streamlink-mod.py script
 echo Creating streamlink-mod.py...
+echo. > "%HOMEPATH%\scripts\streamlink-mod.py"
 (
     echo import os
     echo import time
@@ -41,27 +42,27 @@ echo Creating streamlink-mod.py...
     echo.
     echo def start_streamlink(url, filename):
     echo.    global process
-    echo.    streamlink_cmd = f"streamlink ^{url^} best -o ^{filename^}"
+    echo.    streamlink_cmd = f"streamlink {url} best -o {filename}"
     echo.    try:
-    echo.        print(f"Starting streamlink with command: ^{streamlink_cmd^}")
+    echo.        print(f"Starting streamlink with command: {streamlink_cmd}")
     echo.        process = subprocess.Popen(streamlink_cmd, shell=True)
     echo.    except Exception as e:
-    echo.        print(f"Failed to start streamlink: ^{e^}")
+    echo.        print(f"Failed to start streamlink: {e}")
     echo.
     echo def terminate_process_and_children(pid):
     echo.    try:
     echo.        parent = psutil.Process(pid)
-    echo.        print(f"Terminating parent process ^{pid^}")
+    echo.        print(f"Terminating parent process {pid}")
     echo.        for child in parent.children(recursive=True):
-    echo.            print(f"Terminating child process ^{child.pid^}")
+    echo.            print(f"Terminating child process {child.pid}")
     echo.            child.terminate()
     echo.        parent.terminate()
     echo.        gone, still_alive = psutil.wait_procs([parent], timeout=5)
     echo.        for p in still_alive:
-    echo.            print(f"Killing unresponsive process ^{p.pid^}")
+    echo.            print(f"Killing unresponsive process {p.pid}")
     echo.            p.kill()
     echo.    except psutil.NoSuchProcess:
-    echo.        print(f"No such process: ^{pid^}")
+    echo.        print(f"No such process: {pid}")
     echo.
     echo def signal_handler(sig, frame):
     echo.    print('Signal handler invoked: Stopping the monitor...')
@@ -86,7 +87,7 @@ echo Creating streamlink-mod.py...
     echo.    url = sys.argv[1]
     echo.    filename = sys.argv[2]
     echo.
-    echo.    print(f"Monitoring stream with URL: ^{url^} and filename: ^{filename^}")
+    echo.    print(f"Monitoring stream with URL: {url} and filename: {filename}")
     echo.    streamlink-mod(url, filename)
 ) > "%HOMEPATH%\scripts\streamlink-mod.py"
 
@@ -98,65 +99,61 @@ if exist "%HOMEPATH%\scripts\streamlink-mod.py" (
     exit /b 1
 )
 
-REM Append the streamlink-mod function to the bash.bashrc file
+REM Use PowerShell to append the function to bash.bashrc
 echo Adding streamlink-mod function to bash.bashrc...
-(
-    echo.
-    echo function streamlink-mod() {
-    echo.    action=$1
-    echo.    url=$2
-    echo.    filename=$3
-    echo.    pidfile="/tmp/streamlink-mod.pid"
-    echo.
-    echo.    stop_monitor() {
-    echo.        if [ -f $pidfile ]; then
-    echo.            pid=$(cat $pidfile)
-    echo.            if ps -p $pid > /dev/null; then
-    echo.                kill $pid && rm -f $pidfile
-    echo.                echo "Monitor stopped"
-    echo.            else
-    echo.                rm -f $pidfile
-    echo.            fi
-    echo.        fi
-    echo.    }
-    echo.
-    echo.    case $action in
-    echo.        start)
-    echo.            if [ "$#" -ne 3 ]; then
-    echo.                echo "Usage: streamlink-mod start <URL> <FILENAME>"
-    echo.                return 1
-    echo.            fi
-    echo.
-    echo.            stop_monitor
-    echo.
-    echo.            python %HOMEPATH%/scripts/streamlink-mod.py "$url" "$filename" &
-    echo.            echo $! > $pidfile
-    echo.            echo "Monitor started"
-    echo.            ;;
-    echo.        stop)
-    echo.            if [ "$#" -ne 1 ]; then
-    echo.                echo "Usage: streamlink-mod stop"
-    echo.                return 1
-    echo.            fi
-    echo.            stop_monitor
-    echo.            echo "Monitor stopped"
-    echo.            ;;
-    echo.        *)
-    echo.            echo "Usage: streamlink-mod start <URL> <FILENAME> | streamlink-mod stop"
-    echo.            return 1
-    echo.            ;;
-    echo.    esac
-    echo }
-) >> "C:\Program Files\Git\etc\bash.bashrc"
+powershell -Command "& {
+    $bashrc = 'C:\Program Files\Git\etc\bash.bashrc'
+    $functionText = @'
+function streamlink-mod() {
+    action=$1
+    url=$2
+    filename=$3
+    pidfile="/tmp/streamlink-mod.pid"
 
-REM Check if the bash.bashrc file was updated
-findstr /c:"function streamlink-mod" "C:\Program Files\Git\etc\bash.bashrc" >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo Failed to update bash.bashrc.
-    exit /b 1
-) else (
+    stop_monitor() {
+        if [ -f $pidfile ]; then
+            pid=$(cat $pidfile)
+            if ps -p $pid > /dev/null; then
+                kill $pid && rm -f $pidfile
+                echo "Monitor stopped"
+            else
+                rm -f $pidfile
+            fi
+        fi
+    }
+
+    case $action in
+        start)
+            if [ "$#" -ne 3 ]; then
+                echo "Usage: streamlink-mod start <URL> <FILENAME>"
+                return 1
+            fi
+
+            stop_monitor
+
+            python %HOMEPATH%/scripts/streamlink-mod.py "$url" "$filename" &
+            echo $! > $pidfile
+            echo "Monitor started"
+            ;;
+        stop)
+            if [ "$#" -ne 1 ]; then
+                echo "Usage: streamlink-mod stop"
+                return 1
+            fi
+            stop_monitor
+            echo "Monitor stopped"
+            ;;
+        *)
+            echo "Usage: streamlink-mod start <URL> <FILENAME> | streamlink-mod stop"
+            return 1
+            ;;
+    esac
+}
+'@
+
+    Add-Content -Path $bashrc -Value $functionText
     echo bash.bashrc updated successfully.
-)
+}"
 
 REM Inform the user to restart Git Bash
 echo.
