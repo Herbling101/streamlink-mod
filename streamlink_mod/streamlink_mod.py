@@ -57,7 +57,7 @@ def monitor_streamlink(url, filename):
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: streamlink_mod <URL> <FILENAME>")
+        print("Usage: streamlink_mod URL FILENAME.mp4")
         sys.exit(1)
     url = sys.argv[1]
     filename = sys.argv[2]
