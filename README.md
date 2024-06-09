@@ -1,9 +1,9 @@
-# streamlink_mod
+# 	streamlink_mod
 auto-renew streamlink session if there is any interruption
 
-=
-    Installation Instructions
-=
+
+#	Installation Instructions
+
 
 clone this repo to your scripts directory
 
