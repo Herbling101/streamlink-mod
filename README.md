@@ -19,4 +19,5 @@ Manual steps:
     Reload your bash terminal.
 
 Usage:
+    
     $ streamlink-mod start "URL" "FILENAME.mp4" | streamlink-mod stop
